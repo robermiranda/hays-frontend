@@ -65,6 +65,7 @@ export default function Locations () {
             <p>Gerente: {info?.gerente}</p>
             <p>Dirección: {info?.direccion}</p>
             <p>Teléfono: {info?.telefono}</p>
+            <p>Id: {info?.id}</p>
         </Container>) : <p>Loading map ....</p>
 }
 
