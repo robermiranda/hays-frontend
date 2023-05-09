@@ -1,6 +1,7 @@
 import { tiendaT, tiendaResponseT } from "./types";
 
-const URL_BASE: string = 'http://localhost:3001';
+//const URL_BASE: string = 'http://localhost:3001';
+const URL_BASE: string = 'https://hays-backend.onrender.com';
 
 export function getTiendaList (): Promise<tiendaResponseT[]> {
     return fetch(`${URL_BASE}/tiendas`)
