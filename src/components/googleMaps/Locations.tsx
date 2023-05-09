@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState } from 'react';
 import { GoogleMap, useJsApiLoader, MarkerF } from '@react-google-maps/api';
 import { Container } from '@mui/material';
 import { useRecoilValue } from 'recoil';
@@ -20,6 +20,8 @@ export default function Locations () {
 
     const location0: tiendaT = locations[0];
 
+    const [info, setInfo] = useState<tiendaT>();
+
     
     const center = {
         lat: Number.parseFloat(location0.lat),
@@ -36,6 +38,11 @@ export default function Locations () {
         return <div>Map cannot be loaded right now, sorry.</div>
     }
 
+    const setDetalle = (location: tiendaT) => {
+        
+        setInfo(location);
+    }
+
     return isLoaded ? (
         <Container>
             <GoogleMap zoom={8}
@@ -48,10 +55,16 @@ export default function Locations () {
                             position={{
                                 lat: Number.parseFloat(location.lat),
                                 lng: Number.parseFloat(location.lng)
-                            }}/>
+                            }}
+                            onClick={(e) => setDetalle(location)}/>
                     )
                 }
             </GoogleMap>
+            <p>Titulo: {info?.titulo}</p>
+            <p>Tipo: {info?.tipo}</p>
+            <p>Gerente: {info?.gerente}</p>
+            <p>Dirección: {info?.direccion}</p>
+            <p>Teléfono: {info?.telefono}</p>
         </Container>) : <p>Loading map ....</p>
 }
 
