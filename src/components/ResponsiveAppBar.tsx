@@ -25,13 +25,17 @@ const pumasTheme = createTheme({
 
 const pages = [
     {
-        name: 'Locations',
-        url: '/locations'
+        name: 'List',
+        url: '/list_locations'
     },
     {
         name: 'Admin',
         url: '/admin'
     },
+    {
+        name: 'Locations',
+        url: 'locations'
+    }
 ];
 
 export default function ResponsiveAppBar () {
