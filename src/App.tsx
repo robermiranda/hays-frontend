@@ -8,7 +8,7 @@ import {
 import TiendaList from './components/TiendaList';
 import Admin from './components/admin/Admin';
 import Layout from './components/Layout';
-import Locations from './components/googleMaps/Locations';
+import MapContainer from './components/googleMaps/MapContainer';
 
 
 export default function App() {
@@ -22,7 +22,7 @@ export default function App() {
                             <Routes>
                                     <Route path='/' element={ <p>Aqui la prueba técnica Hays!</p> }/>                            
                                     <Route path='/list_locations' element={<TiendaList/>}/>
-                                    <Route path='/locations' element={<Locations/>}/>
+                                    <Route path='/locations' element={<MapContainer/>}/>
                                     <Route path='/admin' element={<Admin/>}/>
                                     <Route path='*' element={<p>PÁGINA NO ENCONTRADA.</p>}/>
                             </Routes>
