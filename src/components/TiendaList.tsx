@@ -1,4 +1,3 @@
-import { Box } from '@mui/material';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -52,58 +51,3 @@ export default function TiendaList () {
         </TableContainer>
     );
 }
-
-/*
-export default function TiendaList () {
-
-    const locations = useRecoilValue(tiendaListAtom);
-      
-    return  <>
-        <p>Lista de Tiendas.</p>
-        {
-            locations.map((tienda: tiendaT) =>
-                <Box key={tienda.id} mb={2}>
-                    <p>id: {tienda.id}</p>
-                    <p>position: {tienda.lat}, {tienda.lng}</p>
-                    <p>titulo: {tienda.titulo}</p>
-                    <p>gerente: {tienda.gerente}</p>
-                    <p>dirección: {tienda.direccion}</p>
-                    <p>teléfono: {tienda.telefono}</p>
-                    <p>tipo: {tienda.tipo}</p>
-                    <br/>
-                </Box>
-            )
-        }
-    </>
-}
-
-export default function InfoTable ({info}: any) {
-
-    const keys = Object.keys(info);
-
-    return (
-        <TableContainer component={Paper}>
-            <Table aria-label="detail table">
-                <TableHead>
-                    <TableRow>
-                        <TableCell>Property</TableCell>
-                        <TableCell align="right">Value</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {keys.map((key: string) => (
-                        <TableRow key={key}
-                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                            <TableCell component="th" scope="row">
-                                {key}
-                            </TableCell>
-                            <TableCell align="right">
-                                {info[key]}
-                            </TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-        </TableContainer>
-    );
-}*/
