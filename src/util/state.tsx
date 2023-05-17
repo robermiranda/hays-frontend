@@ -1,5 +1,5 @@
 import { atom, selector } from 'recoil';
-import { tiendaT, tiendaResponseT } from './types';
+import { tiendaT, locationResponseT } from './types';
 import { getTiendaList } from './net';
 
 
@@ -8,10 +8,10 @@ export const tiendaListAtom = atom<tiendaT[]> ({
     default: []
 });
 
-const tiendaListFetched = selector<tiendaResponseT[]> ({
+const tiendaListFetched = selector<locationResponseT[]> ({
     key: 'tiendaListFetched_selector',
     get: async () => {
-        const response: tiendaResponseT[] = await getTiendaList();
+        const response: locationResponseT[] = await getTiendaList();
         return response;
     }
 });
@@ -20,7 +20,7 @@ export const tiendaListState = selector<tiendaT[]> ({
     key: 'tiendaListState_selector',
     get: ({get}) => {
         const tiendaList = get(tiendaListFetched);
-        return tiendaList.map((tienda: tiendaResponseT) => {
+        return tiendaList.map((tienda: locationResponseT) => {
             return {
                 id: tienda._id,
                 lat: tienda.position.lat,

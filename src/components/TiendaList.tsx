@@ -6,15 +6,25 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { tiendaT } from '../util/types';
-import {  useRecoilValue } from 'recoil';
-import { tiendaListAtom } from '../util/state';
+import { useGetLocationsQuery } from '../features/api/apiSlice';
+import { locationResponseT } from '../util/types';
+import { formateLocation } from '../features/util';
 
 
 export default function TiendaList () {
 
-    const locations = useRecoilValue(tiendaListAtom);
+    const {
+        data: locations,
+        isLoading,
+        isSuccess,
+        isError
+    } = useGetLocationsQuery(undefined);
 
-    return (
+    if (isLoading) return <p>LOADING LOCATIONS . . . . . .</p>
+    else if (isSuccess) {
+
+        const _locations: tiendaT[] = locations.map((location: locationResponseT) => formateLocation(location));
+        return (
         <TableContainer component={Paper}>
             <Table aria-label="detail table">
                 <TableHead>
@@ -30,7 +40,7 @@ export default function TiendaList () {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {locations.map((location: tiendaT) =>
+                    {_locations.map((location: any) =>
                         <TableRow key={location.id}
                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
 
@@ -48,6 +58,8 @@ export default function TiendaList () {
                     )}
                 </TableBody>
             </Table>
-        </TableContainer>
-    );
+        </TableContainer>)
+    }
+    else if (isError) return <p>ERROR!!</p>
+    else return <p>PAGINA NO CARGADA.</p>;
 }

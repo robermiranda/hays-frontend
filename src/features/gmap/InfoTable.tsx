@@ -5,11 +5,15 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import { useSelector } from 'react-redux';
+import { selectLocation } from '../location/locationSlice';
 
 
-export default function InfoTable ({info}: any) {
+export default function InfoTable () {
 
-    const keys = Object.keys(info);
+    const location = useSelector(selectLocation);
+
+    const keys = Object.keys(location);
 
     return (
         <TableContainer component={Paper}>
@@ -28,7 +32,7 @@ export default function InfoTable ({info}: any) {
                                 {key}
                             </TableCell>
                             <TableCell align="right">
-                                {info[key]}
+                                {location[key]}
                             </TableCell>
                         </TableRow>
                     ))}

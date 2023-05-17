@@ -9,7 +9,7 @@ export type tiendaT = {
     direccion: string;
 }
 
-export type tiendaResponseT = {
+export type locationResponseT = {
     _id: string;
     position: {
         lat: string;
