@@ -1,20 +1,15 @@
 import { useEffect, useState, ChangeEvent } from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { Grid, TextField, Typography } from "@mui/material";
 import { Button, Paper } from "@mui/material";
 import { tienda0, tiendaT } from '../../util/types';
-import { postTienda } from '../../util/net';
-import { tiendaListState, tiendaListAtom } from '../../util/state';
+import { usePostLocationMutation } from '../api/apiSlice';
 
 export default function NewLocationForm () {
 
     const [tienda, setTienda] = useState<tiendaT>(tienda0);
     const [disabled, setDisabled] = useState<boolean>(true);
     const [message, setMessage] = useState<string>("");
-
-    const setTiendaList = useSetRecoilState(tiendaListState);
-    const tiendaList = useRecoilValue(tiendaListAtom);
-
+    const [postLocation, { isLoading }] = usePostLocationMutation();
 
     useEffect(() => {
         setMessage("");
@@ -42,24 +37,24 @@ export default function NewLocationForm () {
         else setDisabled(false);
     }
 
-    function createLocationHandler () {
-        setMessage("");
-        postTienda(tienda)
-        .then(response => {
-            if (response) {
-                setMessage(`Location created with id ${response}`);
-                const tiendaListCopy = [...tiendaList];
-                tiendaListCopy.push({...tienda, id: response});
-                setTiendaList(tiendaListCopy);
+    async function createLocationHandler () {
+        if ( ! isLoading) {
+            try {
+                await postLocation(tienda).unwrap();
+                setMessage('Location created.');
                 setTienda(tienda0);
             }
-            else setMessage('Location NOT created');
-        })
-        .catch(error => {
-            console.error('ERROR in NewLocationForm component');
-        })
-        .finally(() => setDisabled(true));
+            catch(error) {
+                setMessage('Location NOT created');
+                console.error("POST LOCATION ERROR.", error);
+            }
+            finally {
+                setDisabled(true);
+            }
+        }
+        
     }
+
 
     return (
         <Paper elevation={6} sx={{mb: 6}}>
