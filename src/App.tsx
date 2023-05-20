@@ -7,7 +7,8 @@ import {
 import Admin from './features/location/Admin';
 import Layout from './components/Layout';
 import MapContainer from './features/gmap/MapContainer';
-import TiendaList from './components/TiendaList';
+//import TiendaList from './components/TiendaList';
+import LocationList from './components/LocationList';
 
 
 export default function App() {
@@ -19,7 +20,7 @@ export default function App() {
                     <Layout>
                         <Routes>
                             <Route path='/' element={ <p>Aqui la prueba técnica Hays!</p> }/>                            
-                            <Route path='/list_locations' element={<TiendaList/>}/>
+                            <Route path='/list_locations' element={<LocationList/>}/>
                             <Route path='/locations' element={<MapContainer/>}/>
                             <Route path='/admin' element={<Admin/>}/>
                             <Route path='*' element={<p>PÁGINA NO ENCONTRADA.</p>}/>
