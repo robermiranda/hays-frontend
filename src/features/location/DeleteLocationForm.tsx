@@ -1,10 +1,6 @@
 import { useEffect, useState, ChangeEvent } from 'react';
 import { Grid, TextField, Typography } from "@mui/material";
 import { Button, Paper } from "@mui/material";
-/*
-import { deleteTienda } from '../../util/net';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { tiendaListState, tiendaListAtom } from '../../util/state';*/
 import { useDeleteLocationMutation } from '../api/apiSlice';
 
 
@@ -13,12 +9,6 @@ export default function DeleteLocationForm () {
     const [tiendaId, setTiendaId] = useState<string>("");
     const [disabled, setDisabled] = useState<boolean>(true);
     const [message, setMessage] = useState<string>("");
-    /*
-    const setTiendaList = useSetRecoilState(tiendaListState);
-    const tiendaList = useRecoilValue(tiendaListAtom);
-
-    const [updateLocation, mutResponse] = useUpdateLocationMutation();*/
-
     const [deleteLocation, {isLoading}]= useDeleteLocationMutation();
 
     useEffect(() => {
@@ -52,29 +42,7 @@ export default function DeleteLocationForm () {
             console.error('ERROR IN DELETE LOCATION HANDLER', error);
         }
     }
-/*
-    function createLocationHandler () {
-        setMessage("");
-        deleteTienda(tiendaId)
-        .then(response => {
-            if (response) {
-                const tiendaListCopy = [...tiendaList];
-                const index = tiendaListCopy.findIndex(tienda => tienda.id === tiendaId);
-                if (index >= 0) {
-                    tiendaListCopy.splice(index, 1);
-                    setTiendaList(tiendaListCopy);
-                }
-                setMessage(`Location deleted`);
-                setTiendaId("");
-            }
-            else setMessage('Location NOT deleted');
-        })
-        .catch(error => {
-            console.error('ERROR in DeleteLocationForm component');
-        })
-        .finally(() => setDisabled(true));
-    }*/
-
+    
     return <Paper elevation={6} sx={{mb: 6}}>
         <Typography variant="h6"
             style={{color:"#0C2453"}}
