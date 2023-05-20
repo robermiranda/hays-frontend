@@ -1,9 +1,11 @@
 import { useEffect, useState, ChangeEvent } from 'react';
 import { Grid, TextField, Typography } from "@mui/material";
 import { Button, Paper } from "@mui/material";
+/*
 import { deleteTienda } from '../../util/net';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { tiendaListState, tiendaListAtom } from '../../util/state';
+import { tiendaListState, tiendaListAtom } from '../../util/state';*/
+import { useDeleteLocationMutation } from '../api/apiSlice';
 
 
 export default function DeleteLocationForm () {
@@ -11,8 +13,13 @@ export default function DeleteLocationForm () {
     const [tiendaId, setTiendaId] = useState<string>("");
     const [disabled, setDisabled] = useState<boolean>(true);
     const [message, setMessage] = useState<string>("");
+    /*
     const setTiendaList = useSetRecoilState(tiendaListState);
     const tiendaList = useRecoilValue(tiendaListAtom);
+
+    const [updateLocation, mutResponse] = useUpdateLocationMutation();*/
+
+    const [deleteLocation, {isLoading}]= useDeleteLocationMutation();
 
     useEffect(() => {
         setMessage("");
@@ -28,6 +35,24 @@ export default function DeleteLocationForm () {
         else setDisabled(false);
     }
 
+    async function deleteLocationHandler () {
+        setMessage("");
+        try {
+            if ( ! isLoading) { 
+                const response = await deleteLocation(tiendaId).unwrap();
+
+                if (response.status === 'ok') setMessage(`Location Deleted`);
+                else setMessage('Location NOT Deleted');
+
+                setTiendaId("");
+            }
+        }
+        catch (error) {
+            setMessage('ERROR. Location NOT Deleted');
+            console.error('ERROR IN DELETE LOCATION HANDLER', error);
+        }
+    }
+/*
     function createLocationHandler () {
         setMessage("");
         deleteTienda(tiendaId)
@@ -48,7 +73,7 @@ export default function DeleteLocationForm () {
             console.error('ERROR in DeleteLocationForm component');
         })
         .finally(() => setDisabled(true));
-    }
+    }*/
 
     return <Paper elevation={6} sx={{mb: 6}}>
         <Typography variant="h6"
@@ -72,7 +97,7 @@ export default function DeleteLocationForm () {
                 <Button variant="outlined"
                     size="large"
                     disabled={disabled}
-                    onClick={createLocationHandler}>
+                    onClick={deleteLocationHandler}>
 
                     Delete Location
                 </Button>

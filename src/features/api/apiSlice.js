@@ -8,7 +8,7 @@ export const apiSlice = createApi ({
     endpoints: builder => ({
         getLocations: builder.query({
             query: () => '/tiendas',
-            providesTags: ['New', 'Update']
+            providesTags: ['New', 'Update', 'Delete']
         }),
         postLocation: builder.mutation({
             query: location => ({
@@ -26,6 +26,13 @@ export const apiSlice = createApi ({
             }),
             invalidatesTags: ['Update'],
         }),
+        deleteLocation: builder.mutation({
+            query: locationId => ({
+                url: `/tienda/${locationId}`,
+                method: 'Delete',
+            }),
+            invalidatesTags: ['Delete'],
+        }),
     })
 });
 
@@ -34,4 +41,5 @@ export const {
     useGetLocationsQuery,
     usePostLocationMutation,
     useUpdateLocationMutation,
+    useDeleteLocationMutation,
 } = apiSlice;
