@@ -12,9 +12,9 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import {  useRecoilValue } from 'recoil';
-import { tiendaListAtom } from '../util/state';
-import { tiendaT } from '../util/types';
+import { locationResponseT, tiendaT } from '../util/types';
+import { formateLocation } from '../features/util';
+import { useGetLocationsQuery } from '../features/api/apiSlice';
 
 
 function createData (props: tiendaT) {
@@ -105,27 +105,40 @@ function Row(props: { row: ReturnType<typeof createData> }) {
 
 export default function LocationList() {
 
-    const locations = useRecoilValue(tiendaListAtom);
+    const {
+        data: locations,
+        isLoading,
+        isSuccess,
+        isError
+    } = useGetLocationsQuery(undefined);
 
-    const rows: {id: string; titulo: string; tipo: string; detalle: any}[] = locations.map(location => createData(location));
-    
-    return (
-        <TableContainer component={Paper}>
-        <Table aria-label="collapsible table">
-            <TableHead>
-                <TableRow>
-                    <TableCell />
-                    <TableCell>ID</TableCell>
-                    <TableCell align="right">TITULO</TableCell>
-                    <TableCell align="right">TIPO</TableCell>
-                </TableRow>
-            </TableHead>
-            <TableBody>
-                {rows.map((row) => (
-                    <Row key={row.id} row={row} />
-                ))}
-            </TableBody>
-        </Table>
-        </TableContainer>
-    );
+    if (isLoading) return <p>LOADING LOCATIONS . . . . . .</p>
+    else if (isSuccess) {
+
+        const _locations: tiendaT[] = locations.map((location: locationResponseT) => formateLocation(location));
+
+        const rows: {id: string; titulo: string; tipo: string; detalle: any}[] = _locations.map((location: any) => createData(location));
+        
+        return (
+            <TableContainer component={Paper}>
+            <Table aria-label="collapsible table">
+                <TableHead>
+                    <TableRow>
+                        <TableCell />
+                        <TableCell>ID</TableCell>
+                        <TableCell align="right">TITULO</TableCell>
+                        <TableCell align="right">TIPO</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {rows.map((row) => (
+                        <Row key={row.id} row={row} />
+                    ))}
+                </TableBody>
+            </Table>
+            </TableContainer>
+        );
+    }
+    else if (isError) return <p>ERROR!!</p>
+    else return <p>PAGINA NO CARGADA.</p>;
 }
