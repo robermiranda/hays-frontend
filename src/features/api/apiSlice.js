@@ -1,6 +1,22 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 
+function formateLocation (locationResponse) {
+    
+    const { position, informacion } = locationResponse;
+
+    return {
+        id: locationResponse._id,
+        lat: position.lat,
+        lng: position.lng,
+        titulo: informacion.titulo,
+        tipo: informacion.tipo,
+        gerente: informacion.gerente,
+        direccion: informacion.direccion,
+        telefono: informacion.telefono,
+    }
+}
+
 export const apiSlice = createApi ({
     reducerPath: 'api',
     baseQuery: fetchBaseQuery({baseUrl: 'https://hays-backend.onrender.com'}),
@@ -8,6 +24,11 @@ export const apiSlice = createApi ({
     endpoints: builder => ({
         getLocations: builder.query({
             query: () => '/tiendas',
+            transformResponse: locationResponse => {
+                return locationResponse.map(location => {
+                    return formateLocation(location);
+                });
+            },
             providesTags: ['New', 'Update', 'Delete']
         }),
         postLocation: builder.mutation({

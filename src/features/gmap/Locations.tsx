@@ -1,10 +1,9 @@
 import { GoogleMap, useJsApiLoader, MarkerF } from '@react-google-maps/api';
-import { locationResponseT, tiendaT } from '../../util/types';
+import { tiendaT } from '../../util/types';
 import { Paper } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { setLocation } from '../location/locationSlice';
 import { useGetLocationsQuery } from '../../features/api/apiSlice';
-import { formateLocation } from '../util';
 
 
 const KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
@@ -39,15 +38,11 @@ export default function Locations () {
     if (isLoading) return <p>LOADING LOCATIONS . . . . . .</p>
     else if (isSuccess) {
 
-        const _locations: tiendaT[] = locations.map((location: locationResponseT) => {
-            return formateLocation(location)
-        });
-
-        const _location0 = _locations[0];
+        const location0 = locations[0];
 
         const center = {
-            lat: Number.parseFloat(_location0.lat),
-            lng: Number.parseFloat(_location0.lng)
+            lat: Number.parseFloat(location0.lat),
+            lng: Number.parseFloat(location0.lng)
         }
     
         if ( ! GOOGLE_MAPS_API_KEY) return <p>API_KEY not loaded!!</p>
@@ -62,7 +57,7 @@ export default function Locations () {
                     mapContainerStyle={containerStyle}
                     center={center}>
 
-                    {_locations.map((_location: tiendaT) => 
+                    {locations.map((_location: tiendaT) => 
                         <MarkerF key={_location.id}
                             title={_location.titulo}
                             position={{

@@ -12,8 +12,7 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import { locationResponseT, tiendaT } from '../util/types';
-import { formateLocation } from '../features/util';
+import { tiendaT } from '../util/types';
 import { useGetLocationsQuery } from '../features/api/apiSlice';
 
 
@@ -115,9 +114,7 @@ export default function LocationList() {
     if (isLoading) return <p>LOADING LOCATIONS . . . . . .</p>
     else if (isSuccess) {
 
-        const _locations: tiendaT[] = locations.map((location: locationResponseT) => formateLocation(location));
-
-        const rows: {id: string; titulo: string; tipo: string; detalle: any}[] = _locations.map((location: any) => createData(location));
+        const rows: {id: string; titulo: string; tipo: string; detalle: any}[] = locations.map((location: any) => createData(location));
         
         return (
             <TableContainer component={Paper}>
