@@ -2,18 +2,14 @@ import { useEffect, useState, ChangeEvent } from 'react';
 import { Grid, TextField, Typography } from "@mui/material";
 import { Button, Paper } from "@mui/material";
 import { tienda0, tiendaT } from '../../util/types';
-import { updateTienda } from '../../util/net';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { tiendaListState, tiendaListAtom } from '../../util/state';
+import { useUpdateLocationMutation } from '../api/apiSlice';
 
 export default function UpadateLocationForm () {
 
     const [tienda, setTienda] = useState<tiendaT>(tienda0);
     const [disabled, setDisabled] = useState<boolean>(true);
     const [message, setMessage] = useState<string>("");
-
-    const setTiendaList = useSetRecoilState(tiendaListState);
-    const tiendaList = useRecoilValue(tiendaListAtom);
+    const [updateLocation, mutResponse] = useUpdateLocationMutation();
 
     useEffect(() => {
         setMessage("");
@@ -41,33 +37,25 @@ export default function UpadateLocationForm () {
         else setDisabled(false);
     }
 
-    function createLocationHandler () {
+    async function updateLocationHandler () {
         setMessage("");
-        updateTienda(tienda)
-        .then(response => {
-            if (response) {
-                const tiendaListCopy = [...tiendaList];
-                const tiendaFound = tiendaListCopy.find(t => t.id === tienda.id);
-                if (tiendaFound) {
-                    const tiendaCopy: tiendaT = {...tiendaFound}
-                    if (tienda.titulo) tiendaCopy.titulo = tienda.titulo;
-                    if (tienda.tipo) tiendaCopy.tipo = tienda.tipo;
-                    if (tienda.gerente) tiendaCopy.gerente = tienda.gerente;
-                    if (tienda.telefono) tiendaCopy.telefono = tienda.telefono;
-                    if (tienda.direccion) tiendaCopy.direccion = tienda.direccion;
-                    const index = tiendaListCopy.findIndex(t => t.id === tienda.id);
-                    tiendaListCopy.splice(index, 1, tiendaCopy);
-                    setTiendaList(tiendaListCopy);
-                }
-                setMessage(`Location updated`);
+        if ( ! mutResponse.isLoading) {
+            try {
+                const response = await updateLocation(tienda).unwrap();
+                
+                if (response.status === 'ok') setMessage(`Location Updated`);
+                else setMessage('Location NOT Updated');
+
                 setTienda(tienda0);
             }
-            else setMessage('Location NOT updated');
-        })
-        .catch(error => {
-            console.error('ERROR in UpdateLocationForm component',error);
-        })
-        .finally(() => setDisabled(true));
+            catch (error) {
+                setMessage('ERROR. Location NOT updated');
+                console.error('ERROR in UpdateLocationForm component',error);
+            }
+            finally {
+                setDisabled(true);
+            }
+        }
     }
 
     return <Paper elevation={6} sx={{mb: 6}}>
@@ -137,7 +125,7 @@ export default function UpadateLocationForm () {
                 <Button variant="outlined"
                     size="large"
                     disabled={disabled}
-                    onClick={createLocationHandler}>
+                    onClick={updateLocationHandler}>
 
                     Update Location
                 </Button>

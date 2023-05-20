@@ -8,7 +8,7 @@ export const apiSlice = createApi ({
     endpoints: builder => ({
         getLocations: builder.query({
             query: () => '/tiendas',
-            providesTags: ['Post']
+            providesTags: ['New', 'Update']
         }),
         postLocation: builder.mutation({
             query: location => ({
@@ -16,7 +16,15 @@ export const apiSlice = createApi ({
                 method: 'POST',
                 body: location
             }),
-            invalidatesTags: ['Post'],
+            invalidatesTags: ['New'],
+        }),
+        updateLocation: builder.mutation({
+            query: location => ({
+                url: '/tienda',
+                method: 'Put',
+                body: location,
+            }),
+            invalidatesTags: ['Update'],
         }),
     })
 });
@@ -24,5 +32,6 @@ export const apiSlice = createApi ({
 
 export const {
     useGetLocationsQuery,
-    usePostLocationMutation
+    usePostLocationMutation,
+    useUpdateLocationMutation,
 } = apiSlice;
