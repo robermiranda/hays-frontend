@@ -5,10 +5,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { tiendaT } from '../util/types';
 import { useGetLocationsQuery } from '../features/api/apiSlice';
-import { locationResponseT } from '../util/types';
-import { formateLocation } from '../features/util';
 
 
 export default function TiendaList () {
@@ -23,7 +20,6 @@ export default function TiendaList () {
     if (isLoading) return <p>LOADING LOCATIONS . . . . . .</p>
     else if (isSuccess) {
 
-        const _locations: tiendaT[] = locations.map((location: locationResponseT) => formateLocation(location));
         return (
         <TableContainer component={Paper}>
             <Table aria-label="detail table">
@@ -40,7 +36,7 @@ export default function TiendaList () {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {_locations.map((location: any) =>
+                    {locations.map((location: any) =>
                         <TableRow key={location.id}
                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
 
